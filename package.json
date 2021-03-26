@@ -1,0 +1,8 @@
+{
+  "name": "@fluidpay/walletjs",
+  "version": "1.0.0",
+  "description": "wallet module for Apple Pay & Google Pay integrations",
+  "main": "src/wallet.js",
+  "author": "stevemkroll",
+  "license": "MIT"
+}
