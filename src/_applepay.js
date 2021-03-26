@@ -6,7 +6,7 @@ class ApplePay {
     this.payment = payment ? payment : null;
     this.details = details ? details : null;
     this.options = options ? options : null;
-    this.sandbox = sandbox ? sandbox : true;
+    this.sandbox = sandbox !== undefined ? sandbox : true;
   }
   // methods
   validate() {
@@ -26,8 +26,8 @@ class ApplePay {
   }
 }
 
-module.exports = {
-  async submit(domain, key, payment, details, options, sandbox) {
+export const applepay = {
+  submit: async function (domain, key, payment, details, options, sandbox) {
     try {
       // create applepay object
       const applepay = new ApplePay(
@@ -45,9 +45,10 @@ module.exports = {
       // map request & validate merchant
       const request = applepay.mapToPaymentRequest();
       request.onmerchantvalidation = async (event) => {
-        const uri = sandbox
-          ? "https://sandbox.fluidpay.com/api/public/applepay/validatemerchant"
-          : "https://fluidpay.com/api/public/applepay/validatemerchant";
+        const uri =
+          applepay.sandbox === true
+            ? "https://sandbox.fluidpay.com/api/public/applepay/validatemerchant"
+            : "https://fluidpay.com/api/public/applepay/validatemerchant";
         await fetch(uri, {
           method: "post",
           headers: { "content-type": "application/json" },
@@ -67,9 +68,10 @@ module.exports = {
       var response = await request.show();
 
       // tokenize the payment token
-      const uri = sandbox
-        ? "https://sandbox.fluidpay.com/api/public/applepay/paymentauthorized"
-        : "https://fluidpay.com/api/public/applepay/paymentauthorized";
+      const uri =
+        applepay.sandbox === true
+          ? "https://sandbox.fluidpay.com/api/public/applepay/paymentauthorized"
+          : "https://fluidpay.com/api/public/applepay/paymentauthorized";
       await fetch(uri, {
         method: "post",
         headers: { "content-type": "application/json" },
@@ -86,8 +88,11 @@ module.exports = {
           response.complete("fail");
           throw new Error(err);
         });
-      return { status: "success", data: request };
+
+      // return success
+      return { status: "success", data: response.details };
     } catch (err) {
+      // return fail
       return { status: "fail", error: err.message };
     }
   },

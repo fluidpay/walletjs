@@ -2,8 +2,8 @@
   "name": "@fluidpay/walletjs",
   "version": "1.0.0",
   "description": "wallet module for Apple Pay & Google Pay integrations",
-  "type": "commonjs",
-  "main": "./dist/wallet.bundle.js",
+  "type": "module",
+  "main": "./src/wallet.js",
   "private": true,
   "scripts": {
     "build": "webpack"
