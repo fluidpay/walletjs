@@ -4,4 +4,6 @@ import { applepay } from "./_applepay.js";
 
 export const walletjs = {
   applepay,
+  // creditcard,
+  // googlepay
 };
