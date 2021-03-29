@@ -1,7 +1,6 @@
 class ApplePay {
   // constructor
-  constructor(domain, key, payment, details, options, sandbox) {
-    this.domain = domain ? domain : null;
+  constructor(key, payment, details, options, sandbox) {
     this.key = key ? key : null;
     this.payment = payment ? payment : null;
     this.details = details ? details : null;
@@ -27,17 +26,10 @@ class ApplePay {
 }
 
 export const applepay = {
-  submit: async function (domain, key, payment, details, options, sandbox) {
+  submit: async function (key, payment, details, options, sandbox) {
     try {
       // create applepay object
-      const applepay = new ApplePay(
-        domain,
-        key,
-        payment,
-        details,
-        options,
-        sandbox
-      );
+      const applepay = new ApplePay(key, payment, details, options, sandbox);
 
       // validate parameters
       applepay.validate();
@@ -56,7 +48,6 @@ export const applepay = {
             PKeyCompany: key,
             AppleMerchantId: payment.merchantIdentifier,
             ValidationUrl: event.validationURL,
-            domain: domain,
           }),
         })
           .then((res) => res.json())
@@ -68,6 +59,7 @@ export const applepay = {
       var response = await request.show();
 
       // tokenize the payment token
+      var token = null;
       const uri =
         applepay.sandbox === true
           ? "https://sandbox.fluidpay.com/api/public/applepay/paymentauthorized"
@@ -79,18 +71,20 @@ export const applepay = {
           PKeyCompany: key,
           AppleMerchantId: payment.merchantIdentifier,
           ApplePayPayment: response.details,
-          domain: domain,
         }),
       })
         .then((res) => res.json())
-        .then((data) => response.complete("success"))
+        .then((data) => {
+          response.complete("success");
+          token = data;
+        })
         .catch((err) => {
           response.complete("fail");
           throw new Error(err);
         });
 
       // return success
-      return { status: "success", data: response.details };
+      return { status: "success", token: token };
     } catch (err) {
       // return fail
       return { status: "fail", error: err.message };
