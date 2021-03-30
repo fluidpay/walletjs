@@ -3,7 +3,16 @@
   "version": "1.0.0",
   "description": "wallet module for Apple Pay & Google Pay integrations",
   "type": "module",
-  "main": "./src/wallet.js",
+  "main": "src/wallet.js",
+  "private": true,
+  "exports": "./bundle.js",
+  "scripts": {
+    "build": "rollup -c"
+  },
   "author": "stevemkroll",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "rollup": "^2.44.0",
+    "rollup-plugin-terser": "^7.0.2"
+  }
 }

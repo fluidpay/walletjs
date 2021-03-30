@@ -1,0 +1,9 @@
+# npm ignore
+.vscode/
+node_modules/
+src/
+.gitignore
+.prettierignore
+rollup.config.js
+package-lock.json
+package.json
