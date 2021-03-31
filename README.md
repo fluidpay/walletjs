@@ -2,11 +2,82 @@
 
 ### Installation
 
-```
-npm install @fluidpay/walletjs
+```console
+$ npm install @fluidpay/walletjs
 ```
 
-### Overview
+### Basic Usage
+
+> ### HTML:
+>
+> ```html
+> <button onclick="mySubmitFunc()">Apple Pay Button</button>
+> ```
+>
+> ### JS:
+>
+> ```javascript
+> import { walletjs } from "@fluidpay/walletjs";
+>
+> const key = "myKey0123456789";
+>
+> const payment = {
+>   merchantCapabilities: ["supports3DS", "supportsCredit", "supportsDebit"],
+>   supportedNetworks: ["visa", "masterCard", "discover"],
+>   countryCode: "US",
+>   version: 3,
+>   merchantIdentifier: "my.merchant.id.app",
+> };
+>
+> const details = {
+>   total: {
+>     label: "Total Amount",
+>     amount: { currency: "USD", value: "10.61" },
+>   },
+>   // Optional Line Items
+>   // displayItems: [
+>   //{
+>   //label: "subtotal",
+>   //amount: { currency: "USD", value: "9.99" },
+>   //},
+>   //{
+>   //label: "tax",
+>   //amount: { currency: "USD", value: "0.62" },
+>   //},
+>   //],
+> };
+>
+> const options = {
+>   requestShipping: false,
+> };
+>
+> const sandbox = true;
+>
+> async function mySubmitFunc() {
+>   var response = await walletjs.applepay.submit(
+>     key,
+>     payment,
+>     details,
+>     options,
+>     sandbox
+>   );
+>   console.log(response);
+> }
+> ```
+>
+> ### Response:
+>
+> ```json
+> // success
+> { status: "success", token: "aBCd1234" };
+>
+> // fail
+> { status: "fail", error: "missing required parameter - key" };
+> ```
+>
+> ---
+
+<!-- ### Overview
 
 > ### walletjs
 >
@@ -69,4 +140,4 @@ npm install @fluidpay/walletjs
 > > > }
 > > > ```
 > > >
-> > > ---
+> > > --- -->
