@@ -88,13 +88,13 @@ async function myGooglePayFunc() {
 
 ## Response
 
-##### success:
+##### success
 
 ```json
 { "status": "success", "token": "aBCd1234" };
 ```
 
-##### fail:
+##### fail
 
 ```json
 { "status": "fail", "error": "missing required parameter - key" };
