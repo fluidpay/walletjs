@@ -69,10 +69,10 @@ $ npm install @fluidpay/walletjs
 >
 > ```json
 > // success
-> { status: "success", token: "aBCd1234" };
+> { "status": "success", "token": "aBCd1234" };
 >
 > // fail
-> { status: "fail", error: "missing required parameter - key" };
+> { "status": "fail", "error": "missing required parameter - key" };
 > ```
 >
 > ---
