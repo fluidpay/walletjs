@@ -100,9 +100,7 @@ async function myGooglePayFunc() {
 { "status": "fail", "error": "missing required parameter - key" };
 ```
 
----
-
-### Additional Resources
+## Additional Resources
 
 - [Fluidpay Documentation](https://sandbox.fluidpay.com/docs/tokenizer/)
 - [MDN Payment Request API](https://developer.mozilla.org/en-US/docs/Web/API/Payment_Request_API)
