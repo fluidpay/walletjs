@@ -11,7 +11,7 @@ $ npm install @fluidpay/walletjs
 > ### HTML:
 >
 > ```html
-> <button onclick="mySubmitFunc()">Apple Pay Button</button>
+> <button type="button" onclick="mySubmitFunc()">Apple Pay Button</button>
 > ```
 >
 > ### JS:
