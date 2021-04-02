@@ -1,11 +1,11 @@
 class ApplePay {
   // constructor
-  constructor(key, payment, details, options, sandbox) {
+  constructor(key, payment, details, options, domain) {
     this.key = key ? key : null;
     this.payment = payment ? payment : null;
     this.details = details ? details : null;
     this.options = options ? options : null;
-    this.sandbox = sandbox !== undefined ? sandbox : true;
+    this.domain = domain ? domain : null;
   }
   // methods
   validate() {
@@ -26,10 +26,10 @@ class ApplePay {
 }
 
 export const applepay = {
-  submit: async function (key, payment, details, options, sandbox) {
+  submit: async function (key, payment, details, options, domain) {
     try {
       // create applepay object
-      const applepay = new ApplePay(key, payment, details, options, sandbox);
+      const applepay = new ApplePay(key, payment, details, options, domain);
 
       // validate parameters
       applepay.validate();
@@ -37,10 +37,7 @@ export const applepay = {
       // map request & validate merchant
       const request = applepay.mapToPaymentRequest();
       request.onmerchantvalidation = async (event) => {
-        const uri =
-          applepay.sandbox === true
-            ? "https://sandbox.fluidpay.com/api/public/applepay/validatemerchant"
-            : "https://fluidpay.com/api/public/applepay/validatemerchant";
+        const uri = `https://${domain}/api/public/applepay/validatemerchant`;
         await fetch(uri, {
           method: "post",
           headers: { "content-type": "application/json" },
@@ -60,10 +57,7 @@ export const applepay = {
 
       // tokenize the payment token
       var token = null;
-      const uri =
-        applepay.sandbox === true
-          ? "https://sandbox.fluidpay.com/api/public/applepay/paymentauthorized"
-          : "https://fluidpay.com/api/public/applepay/paymentauthorized";
+      const uri = `https://${domain}/api/public/applepay/paymentauthorized`;
       await fetch(uri, {
         method: "post",
         headers: { "content-type": "application/json" },

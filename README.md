@@ -53,7 +53,7 @@ const options = {
   requestShipping: false,
 };
 
-const sandbox = true;
+const domain = "sandbox.fluidpay.com";
 
 async function myApplePayFunc() {
   var response = await walletjs.applepay.submit(
@@ -61,7 +61,7 @@ async function myApplePayFunc() {
     payment,
     details,
     options,
-    sandbox
+    domain
   );
   console.log(response);
 }
