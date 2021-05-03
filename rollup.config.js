@@ -5,15 +5,15 @@ export default {
     {
       name: "walletjs",
       file: "bundle.js",
-      format: "es",
-    },
+      format: "umd"
+    }
   ],
   plugins: [
     terser({
       mangle: {
         eval: true,
-        toplevel: true,
-      },
-    }),
-  ],
+        toplevel: true
+      }
+    })
+  ]
 };

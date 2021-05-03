@@ -1,9 +1,9 @@
 import { applepay } from "./_applepay.js";
 // import { creditcard } from "./_creditcard.js";
-// import { googlepay } from "./_googlepay.js";
+import { GooglePay } from "./_googlepay.js";
 
-export const walletjs = {
+export {
   applepay,
   // creditcard,
-  // googlepay
+  GooglePay
 };
