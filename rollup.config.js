@@ -4,7 +4,7 @@ export default {
   output: [
     {
       name: "walletjs",
-      file: "bundle.js",
+      file: "walletjs.js",
       format: "umd"
     }
   ],
