@@ -104,16 +104,19 @@ const settings = {
     currencyCode: "USD",
     totalPrice: "1.00"
   },
-  onPaymentSuccess: paymentData => {
-    // Get the token.
-    const token = paymentData.paymentMethodData.tokenizationData.token;
+  onGooglePaymentButtonClicked: paymentDataRequest => {
+    paymentDataRequest
+      .then(paymentData => {
+        // Get the token.
+        const token = paymentData.paymentMethodData.tokenizationData.token;
 
-    // Send the token to your backend server, which will
-    // then call our API to create a new transaction with
-    // the token set as the payment method.
-  },
-  onPaymentError: err => {
-    console.log(err);
+        // Send the token to your backend server, which will
+        // then call our API to create a new transaction with
+        // the token set as the payment method.
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 

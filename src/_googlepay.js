@@ -187,13 +187,8 @@ export class GooglePay {
     paymentDataRequest.transactionInfo = this.getGoogleTransactionInfo();
 
     const paymentsClient = this.getGooglePaymentsClient();
-    paymentsClient
-      .loadPaymentData(paymentDataRequest)
-      .then(paymentData => {
-        this.settings.onPaymentSuccess(paymentData);
-      })
-      .catch(err => {
-        this.settings.onPaymentError(err);
-      });
+    this.settings.onGooglePaymentButtonClicked(
+      paymentsClient.loadPaymentData(paymentDataRequest)
+    );
   }
 }
