@@ -81,7 +81,7 @@ async function myApplePayFunc() {
 { "status": "fail", "error": "missing required parameter - key" };
 ```
 
-### Google Pay
+### Google Pay™
 
 ##### html
 
@@ -96,13 +96,13 @@ async function myApplePayFunc() {
 const settings = {
   container: "#container",
   merchantName: "Example Merchant",
-  gatewayMerchantId: "googletest",
+  gatewayMerchantId: "<PUBLIC_API_KEY>",
   allowedCardNetworks: ["VISA"],
   allowedCardAuthMethods: ["PAN_ONLY"],
   transactionInfo: {
     countryCode: "US",
     currencyCode: "USD",
-    totalPrice: "1.00"
+    totalPrice: "1.23"
   },
   onGooglePaymentButtonClicked: paymentDataRequest => {
     paymentDataRequest
