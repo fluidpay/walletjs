@@ -4,16 +4,16 @@ export default {
   output: [
     {
       name: "walletjs",
-      file: "bundle.js",
-      format: "es",
-    },
+      file: "walletjs.js",
+      format: "umd"
+    }
   ],
   plugins: [
     terser({
       mangle: {
         eval: true,
-        toplevel: true,
-      },
-    }),
-  ],
+        toplevel: true
+      }
+    })
+  ]
 };

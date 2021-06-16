@@ -28,14 +28,14 @@ const payment = {
   supportedNetworks: ["visa", "masterCard", "discover"],
   countryCode: "US",
   version: 3,
-  merchantIdentifier: "my.merchant.id.app",
+  merchantIdentifier: "my.merchant.id.app"
 };
 
 const details = {
   total: {
     label: "Total Amount",
-    amount: { currency: "USD", value: "10.61" },
-  },
+    amount: { currency: "USD", value: "10.61" }
+  }
   // Optional Line Items
   // displayItems: [
   //{
@@ -50,7 +50,7 @@ const details = {
 };
 
 const options = {
-  requestShipping: false,
+  requestShipping: false
 };
 
 const domain = "sandbox.fluidpay.com";
@@ -67,25 +67,6 @@ async function myApplePayFunc() {
 }
 ```
 
-### Google Pay
-
-##### html
-
-```html
-<button type="button" onclick="myGooglePayFunc()">Google Pay Button</button>
-```
-
-##### js
-
-```javascript
-import { walletjs } from "@fluidpay/walletjs";
-
-async function myGooglePayFunc() {
-  var response = await walletjs.googlepay.submit();
-  console.log(response);
-}
-```
-
 ## Response
 
 ##### success
@@ -98,6 +79,50 @@ async function myGooglePayFunc() {
 
 ```json
 { "status": "fail", "error": "missing required parameter - key" };
+```
+
+### Google Pay™
+
+##### html
+
+```html
+<div id="container"></div>
+```
+
+##### js
+
+```javascript
+// Create the settings.
+const settings = {
+  container: "#container",
+  merchantName: "Example Merchant",
+  gatewayMerchantId: "<PUBLIC_API_KEY>",
+  allowedCardNetworks: ["VISA"],
+  allowedCardAuthMethods: ["PAN_ONLY"],
+  transactionInfo: {
+    countryCode: "US",
+    currencyCode: "USD",
+    totalPrice: "1.23"
+  },
+  onGooglePaymentButtonClicked: paymentDataRequest => {
+    paymentDataRequest
+      .then(paymentData => {
+        // Get the token.
+        const token = paymentData.paymentMethodData.tokenizationData.token;
+
+        // Send the token to your backend server, which will
+        // then call our API to create a new transaction with
+        // the token set as the payment method.
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+};
+
+// Create a new Google Pay instance with your
+// given settings.
+let gp = new GooglePay(settings);
 ```
 
 ## Additional Resources
