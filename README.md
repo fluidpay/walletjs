@@ -86,43 +86,54 @@ async function myApplePayFunc() {
 ##### html
 
 ```html
-<div id="container"></div>
-```
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Add googlepay.js to the document head -->
+    <script src="walletjs.js"></script>
 
-##### js
+    <!-- Add script tag -->
+    <script>
+      // Create the settings.
+      const settings = {
+        container: "#container",
+        merchantName: "Example Merchant",
+        gatewayMerchantId: "<PUBLIC_API_KEY>",
+        allowedCardNetworks: ["VISA"],
+        allowedCardAuthMethods: ["PAN_ONLY"],
+        transactionInfo: {
+          countryCode: "US",
+          currencyCode: "USD",
+          totalPrice: "1.23"
+        },
+        onGooglePaymentButtonClicked: paymentDataRequest => {
+          paymentDataRequest
+            .then(paymentData => {
+              // Get the token.
+              const token =
+                paymentData.paymentMethodData.tokenizationData.token;
 
-```javascript
-// Create the settings.
-const settings = {
-  container: "#container",
-  merchantName: "Example Merchant",
-  gatewayMerchantId: "<PUBLIC_API_KEY>",
-  allowedCardNetworks: ["VISA"],
-  allowedCardAuthMethods: ["PAN_ONLY"],
-  transactionInfo: {
-    countryCode: "US",
-    currencyCode: "USD",
-    totalPrice: "1.23"
-  },
-  onGooglePaymentButtonClicked: paymentDataRequest => {
-    paymentDataRequest
-      .then(paymentData => {
-        // Get the token.
-        const token = paymentData.paymentMethodData.tokenizationData.token;
+              // Send the token to your backend server, which will
+              // then call our API to create a new transaction with
+              // the token set as the payment method.
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      };
 
-        // Send the token to your backend server, which will
-        // then call our API to create a new transaction with
-        // the token set as the payment method.
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-};
+      // Create a new Google Pay instance with your
+      // given settings.
+      let gp = new walletjs.GooglePay(settings);
+    </script>
+  </head>
 
-// Create a new Google Pay instance with your
-// given settings.
-let gp = new GooglePay(settings);
+  <body>
+    <!-- The div where the button will go -->
+    <div id="container"></div>
+  </body>
+</html>
 ```
 
 ## Additional Resources
