@@ -12,7 +12,10 @@
   "author": "stevemkroll",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@rollup/plugin-babel": "^5.3.0",
     "rollup": "^2.44.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^7.0.2"
   }
 }

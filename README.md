@@ -83,7 +83,7 @@ async function myApplePayFunc() {
 
 ### Google Pay™
 
-##### html
+##### Simple HTML
 
 ```html
 <!DOCTYPE html>
@@ -134,6 +134,53 @@ async function myApplePayFunc() {
     <div id="container"></div>
   </body>
 </html>
+```
+
+##### Single Page Apps (Vue/React)
+
+###### JavaScript
+
+```javascript
+import { default as walletjs } from "../walletjs.js";
+
+// Create the settings.
+const settings = {
+  container: "#container",
+  merchantName: "Example Merchant",
+  gatewayMerchantId: "<PUBLIC_API_KEY>",
+  allowedCardNetworks: ["VISA"],
+  allowedCardAuthMethods: ["PAN_ONLY"],
+  transactionInfo: {
+    countryCode: "US",
+    currencyCode: "USD",
+    totalPrice: "1.23"
+  },
+  onGooglePaymentButtonClicked: paymentDataRequest => {
+    paymentDataRequest
+      .then(paymentData => {
+        // Get the token.
+        const token = paymentData.paymentMethodData.tokenizationData.token;
+
+        // Send the token to your backend server, which will
+        // then call our API to create a new transaction with
+        // the token set as the payment method.
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+};
+
+// Create a new Google Pay instance with your
+// given settings.
+let gp = new walletjs.GooglePay(settings);
+```
+
+###### HTML (Template)
+
+```html
+<!-- The div where the button will go -->
+<div id="container"></div>
 ```
 
 ## Additional Resources
