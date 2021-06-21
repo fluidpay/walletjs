@@ -4,40 +4,45 @@ import { terser } from "rollup-plugin-terser";
 
 export default [
   {
-    input: "src/wallet-umd.js",
-    output: {
-      file: "dist/umd/walletjs.js",
-      format: "umd",
-      name: "walletjs",
-      esModule: false,
-      exports: "named",
-      sourcemap: false
-    },
-    plugins: [
-      resolve(),
-      babel({
-        babelHelpers: "bundled"
-      }),
-      terser()
-    ]
-  },
-  {
-    input: "src/wallet-es.js",
+    input: "src/walletjs.js",
     output: [
       {
-        file: "dist/esm/walletjs.js",
+        file: "dist/walletjs.js",
+        format: "umd",
+        name: "walletjs",
+        esModule: false,
+        exports: "named",
+        sourcemap: false,
+      },
+      {
+        file: "dist/walletjs.umd.js",
+        format: "umd",
+        name: "walletjs",
+        esModule: false,
+        exports: "named",
+        sourcemap: false,
+      },
+      {
+        file: "dist/walletjs.esm.js",
         format: "esm",
         name: "walletjs",
         exports: "named",
-        sourcemap: false
+        sourcemap: false,
       },
       {
-        file: "dist/cjs/walletjs.js",
+        file: "dist/walletjs.cjs.js",
         format: "cjs",
         name: "walletjs",
         exports: "named",
-        sourcemap: false
-      }
-    ]
-  }
+        sourcemap: false,
+      },
+    ],
+    plugins: [
+      resolve(),
+      babel({
+        babelHelpers: "bundled",
+      }),
+      terser(),
+    ],
+  },
 ];
