@@ -8,11 +8,10 @@ export default [
     output: [
       {
         file: "dist/walletjs.js",
-        format: "umd",
+        format: "esm",
         name: "walletjs",
-        esModule: false,
         exports: "named",
-        sourcemap: false,
+        sourcemap: false
       },
       {
         file: "dist/walletjs.umd.js",
@@ -20,29 +19,29 @@ export default [
         name: "walletjs",
         esModule: false,
         exports: "named",
-        sourcemap: false,
+        sourcemap: false
       },
       {
         file: "dist/walletjs.esm.js",
         format: "esm",
         name: "walletjs",
         exports: "named",
-        sourcemap: false,
+        sourcemap: false
       },
       {
         file: "dist/walletjs.cjs.js",
         format: "cjs",
         name: "walletjs",
         exports: "named",
-        sourcemap: false,
-      },
+        sourcemap: false
+      }
     ],
     plugins: [
       resolve(),
       babel({
-        babelHelpers: "bundled",
+        babelHelpers: "bundled"
       }),
-      terser(),
-    ],
-  },
+      terser()
+    ]
+  }
 ];

@@ -43,23 +43,23 @@ export class ApplePay {
   async submit() {
     try {
       // Handle applepay merchant validation
-      this.request.onmerchantvalidation = async (event) => {
+      this.request.onmerchantvalidation = async event => {
         await fetch(`https://${this.domain}/api/applepay/validatemerchant`, {
           method: "post",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
             PKeyCompany: this.key,
             AppleMerchantId: this.payment.merchantIdentifier,
-            ValidationUrl: event.validationURL,
-          }),
+            ValidationUrl: event.validationURL
+          })
         })
-          .then((res) => res.json())
-          .then((data) => event.complete(data))
-          .catch((err) => event.complete(err));
+          .then(res => res.json())
+          .then(data => event.complete(data))
+          .catch(err => event.complete(err));
       };
 
       // trigger the ui
-      var response = await request.show();
+      var response = await this.request.show();
 
       // tokenize the payment token
       var token = null;
@@ -69,15 +69,15 @@ export class ApplePay {
         body: JSON.stringify({
           PKeyCompany: this.key,
           AppleMerchantId: this.payment.merchantIdentifier,
-          ApplePayPayment: response.details,
-        }),
+          ApplePayPayment: response.details
+        })
       })
-        .then((res) => res.json())
-        .then((data) => {
+        .then(res => res.json())
+        .then(data => {
           response.complete("success");
           token = data;
         })
-        .catch((err) => {
+        .catch(err => {
           response.complete("fail");
           throw new Error(err);
         });
