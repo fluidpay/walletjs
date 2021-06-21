@@ -143,7 +143,7 @@ export class GooglePay {
 
   getGooglePaymentsClient() {
     if (this.paymentsClient === null) {
-      this.paymentsClient = new google.payments.api.PaymentsClient({
+      this.paymentsClient = new window.google.payments.api.PaymentsClient({
         environment: "TEST"
       });
     }

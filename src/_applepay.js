@@ -26,7 +26,7 @@ class ApplePay {
 }
 
 export const applepay = {
-  submit: async function (key, payment, details, options, domain) {
+  submit: async function(key, payment, details, options, domain) {
     try {
       // create applepay object
       const applepay = new ApplePay(key, payment, details, options, domain);
@@ -36,7 +36,7 @@ export const applepay = {
 
       // map request & validate merchant
       const request = applepay.mapToPaymentRequest();
-      request.onmerchantvalidation = async (event) => {
+      request.onmerchantvalidation = async event => {
         const uri = `https://${domain}/api/public/applepay/validatemerchant`;
         await fetch(uri, {
           method: "post",
@@ -44,12 +44,12 @@ export const applepay = {
           body: JSON.stringify({
             PKeyCompany: key,
             AppleMerchantId: payment.merchantIdentifier,
-            ValidationUrl: event.validationURL,
-          }),
+            ValidationUrl: event.validationURL
+          })
         })
-          .then((res) => res.json())
-          .then((data) => event.complete(data))
-          .catch((err) => event.complete(err));
+          .then(res => res.json())
+          .then(data => event.complete(data))
+          .catch(err => event.complete(err));
       };
 
       // trigger the ui
@@ -64,15 +64,15 @@ export const applepay = {
         body: JSON.stringify({
           PKeyCompany: key,
           AppleMerchantId: payment.merchantIdentifier,
-          ApplePayPayment: response.details,
-        }),
+          ApplePayPayment: response.details
+        })
       })
-        .then((res) => res.json())
-        .then((data) => {
+        .then(res => res.json())
+        .then(data => {
           response.complete("success");
           token = data;
         })
-        .catch((err) => {
+        .catch(err => {
           response.complete("fail");
           throw new Error(err);
         });
@@ -83,5 +83,5 @@ export const applepay = {
       // return fail
       return { status: "fail", error: err.message };
     }
-  },
+  }
 };
