@@ -13,57 +13,41 @@ $ npm install @fluidpay/walletjs
 ##### html
 
 ```html
-<button type="button" onclick="myApplePayFunc()">Apple Pay Button</button>
+<button type="button" onclick="submitApplePay()">Apple Pay Button</button>
 ```
 
 ##### js
 
 ```javascript
-import { walletjs } from "@fluidpay/walletjs";
+import { ApplePay } from "@fluidpay/walletjs";
 
-const key = "myKey0123456789";
+const ap = new ApplePay({
+  key: "myKey0123456789",
+  domain: "sandbox.fluidpay.com",
 
-const payment = {
-  merchantCapabilities: ["supports3DS", "supportsCredit", "supportsDebit"],
-  supportedNetworks: ["visa", "masterCard", "discover"],
-  countryCode: "US",
-  version: 3,
-  merchantIdentifier: "my.merchant.id.app"
-};
+  payment: {
+    merchantCapabilities: ["supports3DS", "supportsCredit", "supportsDebit"],
+    supportedNetworks: ["visa", "masterCard", "discover"],
+    countryCode: "US",
+    version: 3,
+    merchantIdentifier: "my.merchant.id.app",
+  },
 
-const details = {
-  total: {
-    label: "Total Amount",
-    amount: { currency: "USD", value: "10.61" }
-  }
-  // Optional Line Items
-  // displayItems: [
-  //{
-  //label: "subtotal",
-  //amount: { currency: "USD", value: "9.99" },
-  //},
-  //{
-  //label: "tax",
-  //amount: { currency: "USD", value: "0.62" },
-  //},
-  //],
-};
+  details: {
+    total: {
+      label: "Total Amount",
+      amount: { currency: "USD", value: "10.61" },
+    },
+  },
 
-const options = {
-  requestShipping: false
-};
+  options: {
+    requestShipping: false,
+  },
+});
 
-const domain = "sandbox.fluidpay.com";
-
-async function myApplePayFunc() {
-  var response = await walletjs.applepay.submit(
-    key,
-    payment,
-    details,
-    options,
-    domain
-  );
-  console.log(response);
+function submitApplePay() {
+  var resp = ap.submit();
+  console.log(resp);
 }
 ```
 
@@ -83,68 +67,14 @@ async function myApplePayFunc() {
 
 ### Google Pay™
 
-##### Simple HTML
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <!-- Add googlepay.js to the document head -->
-    <script src="walletjs.js"></script>
-
-    <!-- Add script tag -->
-    <script>
-      // Create the settings.
-      const settings = {
-        container: "#container",
-        merchantName: "Example Merchant",
-        gatewayMerchantId: "<PUBLIC_API_KEY>",
-        allowedCardNetworks: ["VISA"],
-        allowedCardAuthMethods: ["PAN_ONLY"],
-        transactionInfo: {
-          countryCode: "US",
-          currencyCode: "USD",
-          totalPrice: "1.23"
-        },
-        onGooglePaymentButtonClicked: paymentDataRequest => {
-          paymentDataRequest
-            .then(paymentData => {
-              // Get the token.
-              const token =
-                paymentData.paymentMethodData.tokenizationData.token;
-
-              // Send the token to your backend server, which will
-              // then call our API to create a new transaction with
-              // the token set as the payment method.
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        }
-      };
-
-      // Create a new Google Pay instance with your
-      // given settings.
-      let gp = new walletjs.GooglePay(settings);
-    </script>
-  </head>
-
-  <body>
-    <!-- The div where the button will go -->
-    <div id="container"></div>
-  </body>
-</html>
-```
-
-##### Single Page Apps (Vue/React)
-
-###### JavaScript
+###### js
 
 ```javascript
-import { default as walletjs } from "../walletjs.js";
+import { GooglePay } from "@fluidpay/walletjs";
 
-// Create the settings.
-const settings = {
+// Create a new Google Pay instance with your
+// given settings.
+let gp = new GooglePay({
   container: "#container",
   merchantName: "Example Merchant",
   gatewayMerchantId: "<PUBLIC_API_KEY>",
@@ -153,11 +83,12 @@ const settings = {
   transactionInfo: {
     countryCode: "US",
     currencyCode: "USD",
-    totalPrice: "1.23"
+    totalPrice: "1.23",
   },
-  onGooglePaymentButtonClicked: paymentDataRequest => {
+  // Deal with response from payment clicked
+  onGooglePaymentButtonClicked: (paymentDataRequest) => {
     paymentDataRequest
-      .then(paymentData => {
+      .then((paymentData) => {
         // Get the token.
         const token = paymentData.paymentMethodData.tokenizationData.token;
 
@@ -165,15 +96,11 @@ const settings = {
         // then call our API to create a new transaction with
         // the token set as the payment method.
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
-  }
-};
-
-// Create a new Google Pay instance with your
-// given settings.
-let gp = new walletjs.GooglePay(settings);
+  },
+});
 ```
 
 ###### HTML (Template)
