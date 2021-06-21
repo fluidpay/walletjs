@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./dist/walletjs.js"></script>
+    <script>
+      // Googlepay
+      new walletjs.GooglePay({
+        container: "#gcontainer",
+        merchantName: "Example Merchant",
+        gatewayMerchantId: "<PUBLIC_API_KEY>",
+        allowedCardNetworks: ["VISA"],
+        allowedCardAuthMethods: ["PAN_ONLY"],
+        transactionInfo: {
+          countryCode: "US",
+          currencyCode: "USD",
+          totalPrice: "1.23",
+        },
+        onGooglePaymentButtonClicked: (paymentDataRequest) => {
+          paymentDataRequest
+            .then((paymentData) => {
+              // Get the token.
+              const token =
+                paymentData.paymentMethodData.tokenizationData.token;
+
+              // Send the token to your backend server, which will
+              // then call our API to create a new transaction with
+              // the token set as the payment method.
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        },
+      });
+
+      // Applepay
+      const ap = new walletjs.ApplePay({
+        key: "myKey0123456789",
+        domain: "sandbox.fluidpay.com",
+
+        payment: {
+          merchantCapabilities: [
+            "supports3DS",
+            "supportsCredit",
+            "supportsDebit",
+          ],
+          supportedNetworks: ["visa", "masterCard", "discover"],
+          countryCode: "US",
+          version: 3,
+          merchantIdentifier: "my.merchant.id.app",
+        },
+
+        details: {
+          total: {
+            label: "Total Amount",
+            amount: { currency: "USD", value: "10.61" },
+          },
+        },
+
+        options: {
+          requestShipping: false,
+        },
+      });
+
+      function submitApplePay() {
+        ap.submit();
+      }
+    </script>
+  </head>
+  <body>
+    <div id="gcontainer"></div>
+    <div id="acontainer">
+      <button type="button" onclick="submitApplePay()">Apple Pay Button</button>
+    </div>
+  </body>
+</html>
