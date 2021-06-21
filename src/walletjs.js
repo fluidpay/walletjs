@@ -1,5 +1,5 @@
-import { ApplePay } from "./_applepay.js";
-import { GooglePay } from "./_googlepay.js";
+import { ApplePay } from "./applepay.js";
+import { GooglePay } from "./googlepay.js";
 
 export default {
   ApplePay,
