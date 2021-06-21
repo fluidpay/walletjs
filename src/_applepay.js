@@ -1,55 +1,61 @@
-class ApplePay {
-  // constructor
-  constructor(key, payment, details, options, domain) {
-    this.key = key ? key : null;
-    this.payment = payment ? payment : null;
-    this.details = details ? details : null;
-    this.options = options ? options : null;
-    this.domain = domain ? domain : null;
-  }
-  // methods
-  validate() {
-    for (const [key, val] of Object.entries(this)) {
-      if (val === null) {
-        throw new Error(`missing required parameter - ${key}`);
-      }
-      continue;
+export class ApplePay {
+  constructor(settings) {
+    this.key = settings.key ? settings.key : null;
+    this.domain = settings.domain ? settings.domain : null;
+    this.payment = settings.payment ? settings.payment : null;
+    this.details = settings.details ? settings.details : null;
+    this.options = settings.options ? settings.options : null;
+
+    // Validate the constructor settings
+    var validationError = this.validate();
+    if (validationError) {
+      throw new Error(validationError);
     }
-  }
-  mapToPaymentRequest() {
-    return new PaymentRequest(
+
+    // Setup payment request
+    this.request = new PaymentRequest(
       [{ supportedMethods: "https://apple.com/apple-pay", data: this.payment }],
       this.details,
       this.options
     );
   }
-}
 
-export const applepay = {
-  submit: async function(key, payment, details, options, domain) {
+  validate() {
+    if (this.key == null) {
+      return "missing required parameter key";
+    }
+    if (this.domain == null) {
+      return "missing required parameter domain";
+    }
+    if (this.payment == null) {
+      return "missing required parameter payment";
+    }
+    if (this.details == null) {
+      return "missing required parameter details";
+    }
+    if (this.options == null) {
+      return "missing required parameter options";
+    }
+
+    return undefined;
+  }
+
+  async submit() {
     try {
-      // create applepay object
-      const applepay = new ApplePay(key, payment, details, options, domain);
-
-      // validate parameters
-      applepay.validate();
-
-      // map request & validate merchant
-      const request = applepay.mapToPaymentRequest();
-      request.onmerchantvalidation = async event => {
-        const uri = `https://${domain}/api/public/applepay/validatemerchant`;
-        await fetch(uri, {
+      // Handle applepay merchant validation
+      this.request.onmerchantvalidation = async (event) => {
+        await fetch(`https://${this.domain}/api/applepay/validatemerchant`, {
           method: "post",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
-            PKeyCompany: key,
-            AppleMerchantId: payment.merchantIdentifier,
-            ValidationUrl: event.validationURL
-          })
+            PKeyCompany: this.key,
+            AppleMerchantId: this.payment.merchantIdentifier,
+            ValidationUrl: event.validationURL,
+          }),
         })
-          .then(res => res.json())
-          .then(data => event.complete(data))
-          .catch(err => event.complete(err));
+          .then((res) => res.json())
+          .then((data) => event.complete(data))
+          .catch((err) => event.complete(err));
       };
 
       // trigger the ui
@@ -57,22 +63,21 @@ export const applepay = {
 
       // tokenize the payment token
       var token = null;
-      const uri = `https://${domain}/api/public/applepay/paymentauthorized`;
-      await fetch(uri, {
+      await fetch(`https://${this.domain}/api/applepay/paymentauthorized`, {
         method: "post",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          PKeyCompany: key,
-          AppleMerchantId: payment.merchantIdentifier,
-          ApplePayPayment: response.details
-        })
+          PKeyCompany: this.key,
+          AppleMerchantId: this.payment.merchantIdentifier,
+          ApplePayPayment: response.details,
+        }),
       })
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           response.complete("success");
           token = data;
         })
-        .catch(err => {
+        .catch((err) => {
           response.complete("fail");
           throw new Error(err);
         });
@@ -84,4 +89,4 @@ export const applepay = {
       return { status: "fail", error: err.message };
     }
   }
-};
+}
