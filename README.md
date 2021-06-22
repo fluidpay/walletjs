@@ -19,9 +19,9 @@ $ npm install @fluidpay/walletjs
 ##### js
 
 ```javascript
-import { ApplePay } from "@fluidpay/walletjs";
+import walletjs from "@fluidpay/walletjs";
 
-const ap = new ApplePay({
+const ap = new walletjs.ApplePay({
   key: "myKey0123456789",
   domain: "sandbox.fluidpay.com",
 
@@ -30,19 +30,19 @@ const ap = new ApplePay({
     supportedNetworks: ["visa", "masterCard", "discover"],
     countryCode: "US",
     version: 3,
-    merchantIdentifier: "my.merchant.id.app",
+    merchantIdentifier: "my.merchant.id.app"
   },
 
   details: {
     total: {
       label: "Total Amount",
-      amount: { currency: "USD", value: "10.61" },
-    },
+      amount: { currency: "USD", value: "10.61" }
+    }
   },
 
   options: {
-    requestShipping: false,
-  },
+    requestShipping: false
+  }
 });
 
 function submitApplePay() {
@@ -70,11 +70,11 @@ function submitApplePay() {
 ###### js
 
 ```javascript
-import { GooglePay } from "@fluidpay/walletjs";
+import walletjs from "@fluidpay/walletjs";
 
 // Create a new Google Pay instance with your
 // given settings.
-let gp = new GooglePay({
+let gp = new walletjs.GooglePay({
   container: "#container",
   merchantName: "Example Merchant",
   gatewayMerchantId: "<PUBLIC_API_KEY>",
@@ -83,12 +83,12 @@ let gp = new GooglePay({
   transactionInfo: {
     countryCode: "US",
     currencyCode: "USD",
-    totalPrice: "1.23",
+    totalPrice: "1.23"
   },
   // Deal with response from payment clicked
-  onGooglePaymentButtonClicked: (paymentDataRequest) => {
+  onGooglePaymentButtonClicked: paymentDataRequest => {
     paymentDataRequest
-      .then((paymentData) => {
+      .then(paymentData => {
         // Get the token.
         const token = paymentData.paymentMethodData.tokenizationData.token;
 
@@ -96,10 +96,10 @@ let gp = new GooglePay({
         // then call our API to create a new transaction with
         // the token set as the payment method.
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
-  },
+  }
 });
 ```
 

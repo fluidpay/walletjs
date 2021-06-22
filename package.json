@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "wallet module for Apple Pay & Google Pay integrations",
   "type": "module",
-  "main": "dist/wallet.js",
+  "main": "dist/walletjs.js",
   "private": true,
   "scripts": {
     "build": "rollup -c"
