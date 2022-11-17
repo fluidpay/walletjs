@@ -94,7 +94,7 @@ export class ApplePay {
                 });
 
             // return success
-            return { status: "success", token: token };
+            return { status: "success", token: token, raw_response: response };
         } catch (err) {
             // return fail
             return { status: "fail", error: err.message };
