@@ -24,30 +24,41 @@ export class GooglePay {
       this.gpSettings = {
         baseRequest: {
           apiVersion: 2,
-          apiVersionMinor: 0
+          apiVersionMinor: 0,
         },
         tokenizationSpecification: {
           type: "PAYMENT_GATEWAY",
           parameters: {
             gateway: "fluidpay",
-            gatewayMerchantId: this.settings.gatewayMerchantId
-          }
-        }
+            gatewayMerchantId: this.settings.gatewayMerchantId,
+          },
+        },
       };
+
+      var parameters = {
+        allowedAuthMethods: this.settings.allowedCardAuthMethods,
+        allowedCardNetworks: this.settings.allowedCardNetworks,
+      };
+
+      if (this.settings.billingAddressRequired) {
+        parameters.billingAddressParameters =
+          this.settings.billingAddressRequired;
+      }
+      if (this.settings.billingAddressParameters) {
+        parameters.billingAddressParameters =
+          this.settings.billingAddressParameters;
+      }
 
       this.gpSettings.baseCardPaymentMethod = {
         type: "CARD",
-        parameters: {
-          allowedAuthMethods: this.settings.allowedCardAuthMethods,
-          allowedCardNetworks: this.settings.allowedCardNetworks
-        }
+        parameters: parameters,
       };
 
       this.gpSettings.cardPaymentMethod = Object.assign(
         {},
         this.gpSettings.baseCardPaymentMethod,
         {
-          tokenizationSpecification: this.gpSettings.tokenizationSpecification
+          tokenizationSpecification: this.gpSettings.tokenizationSpecification,
         }
       );
 
@@ -124,19 +135,19 @@ export class GooglePay {
 
   getGoogleIsReadyToPayRequest() {
     return Object.assign({}, this.gpSettings.baseRequest, {
-      allowedPaymentMethods: [this.gpSettings.baseCardPaymentMethod]
+      allowedPaymentMethods: [this.gpSettings.baseCardPaymentMethod],
     });
   }
 
   getGooglePaymentDataRequest() {
     const paymentDataRequest = Object.assign({}, this.gpSettings.baseRequest);
     paymentDataRequest.allowedPaymentMethods = [
-      this.gpSettings.cardPaymentMethod
+      this.gpSettings.cardPaymentMethod,
     ];
     paymentDataRequest.transactionInfo = this.getGoogleTransactionInfo();
     paymentDataRequest.merchantInfo = {
       merchantName: this.settings.merchantName,
-      merchantId: this.settings.merchantId
+      merchantId: this.settings.merchantId,
     };
 
     return paymentDataRequest;
@@ -145,7 +156,7 @@ export class GooglePay {
   getGooglePaymentsClient() {
     if (this.paymentsClient === null) {
       this.paymentsClient = new window.google.payments.api.PaymentsClient({
-        environment: "{{googlePayEnvironment}}"
+        environment: "{{googlePayEnvironment}}",
       });
     }
 
@@ -156,12 +167,12 @@ export class GooglePay {
     const paymentsClient = this.getGooglePaymentsClient();
     paymentsClient
       .isReadyToPay(this.getGoogleIsReadyToPayRequest())
-      .then(response => {
+      .then((response) => {
         if (response.result) {
           this.addGooglePayButton();
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       });
   }
@@ -169,7 +180,11 @@ export class GooglePay {
   addGooglePayButton() {
     const paymentsClient = this.getGooglePaymentsClient();
     const button = paymentsClient.createButton({
-      onClick: this.onGooglePaymentButtonClicked.bind(this)
+      buttonType:
+        this.settings.buttonType !== undefined
+          ? this.settings.buttonType
+          : "buy",
+      onClick: this.onGooglePaymentButtonClicked.bind(this),
     });
     this.settings.container.appendChild(button);
   }
@@ -179,7 +194,7 @@ export class GooglePay {
       countryCode: this.settings.transactionInfo.countryCode,
       currencyCode: this.settings.transactionInfo.currencyCode,
       totalPriceStatus: "FINAL",
-      totalPrice: this.settings.transactionInfo.totalPrice
+      totalPrice: this.settings.transactionInfo.totalPrice,
     };
   }
 
