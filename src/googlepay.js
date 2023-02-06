@@ -39,7 +39,9 @@ export class GooglePay {
         type: "CARD",
         parameters: {
           allowedAuthMethods: this.settings.allowedCardAuthMethods,
-          allowedCardNetworks: this.settings.allowedCardNetworks
+          allowedCardNetworks: this.settings.allowedCardNetworks,
+          billingAddressRequired: this.settings.billingAddressRequired,
+          billingAddressParameters: this.settings.billingAddressParameters
         }
       };
 
@@ -169,6 +171,7 @@ export class GooglePay {
   addGooglePayButton() {
     const paymentsClient = this.getGooglePaymentsClient();
     const button = paymentsClient.createButton({
+      buttonType: this.settings.buttonType,
       onClick: this.onGooglePaymentButtonClicked.bind(this)
     });
     this.settings.container.appendChild(button);
