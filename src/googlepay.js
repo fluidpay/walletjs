@@ -41,7 +41,7 @@ export class GooglePay {
       };
 
       if (this.settings.billingAddressRequired) {
-        parameters.billingAddressParameters =
+        parameters.billingAddressRequired =
           this.settings.billingAddressRequired;
       }
       if (this.settings.billingAddressParameters) {
