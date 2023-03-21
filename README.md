@@ -24,25 +24,25 @@ import walletjs from "@fluidpay/walletjs";
 const ap = new walletjs.ApplePay({
   key: "myKey0123456789",
   domain: "sandbox.fluidpay.com",
-
+  domainName: "", // optionally override the Merchant Domain referenced in their certificate.
   payment: {
     merchantCapabilities: ["supports3DS", "supportsCredit", "supportsDebit"],
     supportedNetworks: ["visa", "masterCard", "discover"],
     countryCode: "US",
     version: 3,
-    merchantIdentifier: "my.merchant.id.app"
+    merchantIdentifier: "my.merchant.id.app",
   },
 
   details: {
     total: {
       label: "Total Amount",
-      amount: { currency: "USD", value: "10.61" }
-    }
+      amount: { currency: "USD", value: "10.61" },
+    },
   },
 
   options: {
-    requestShipping: false
-  }
+    requestShipping: false,
+  },
 });
 
 function submitApplePay() {
@@ -83,12 +83,12 @@ let gp = new walletjs.GooglePay({
   transactionInfo: {
     countryCode: "US",
     currencyCode: "USD",
-    totalPrice: "1.23"
+    totalPrice: "1.23",
   },
   // Deal with response from payment clicked
-  onGooglePaymentButtonClicked: paymentDataRequest => {
+  onGooglePaymentButtonClicked: (paymentDataRequest) => {
     paymentDataRequest
-      .then(paymentData => {
+      .then((paymentData) => {
         // Get the token.
         const token = paymentData.paymentMethodData.tokenizationData.token;
 
@@ -96,10 +96,10 @@ let gp = new walletjs.GooglePay({
         // then call our API to create a new transaction with
         // the token set as the payment method.
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
-  }
+  },
 });
 ```
 
