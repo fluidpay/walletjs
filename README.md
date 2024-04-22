@@ -31,6 +31,9 @@ const ap = new walletjs.ApplePay({
     countryCode: "US",
     version: 3,
     merchantIdentifier: "my.merchant.id.app",
+    // Use requiredBillingContactFields to request the user's
+    // billing address that is associated with their payment method.
+    requiredBillingContactFields: ["email", "name", "phone", "postalAddress"], // Default undefinied
   },
 
   details: {
