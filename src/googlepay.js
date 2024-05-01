@@ -29,7 +29,7 @@ export class GooglePay {
         tokenizationSpecification: {
           type: "PAYMENT_GATEWAY",
           parameters: {
-            gateway: "fluidpay",
+            gateway: "gatewayprocessing",
             gatewayMerchantId: this.settings.gatewayMerchantId,
           },
         },
