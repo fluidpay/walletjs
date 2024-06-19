@@ -148,6 +148,8 @@ export class GooglePay {
     paymentDataRequest.merchantInfo = {
       merchantName: this.settings.merchantName,
       merchantId: this.settings.merchantId,
+      merchantOrigin: this.settings.merchantOrigin,
+      authJwt: this.settings.authJwt
     };
 
     return paymentDataRequest;
