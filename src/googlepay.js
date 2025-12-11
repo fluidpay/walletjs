@@ -151,6 +151,9 @@ export class GooglePay {
       merchantOrigin: this.settings.merchantOrigin,
       authJwt: this.settings.authJwt,
     };
+    if (this.settings.emailRequired !== undefined) {
+      paymentDataRequest.emailRequired = this.settings.emailRequired;
+    }
 
     return paymentDataRequest;
   }
