@@ -44,9 +44,20 @@ export class GooglePay {
         parameters.billingAddressRequired =
           this.settings.billingAddressRequired;
       }
+
       if (this.settings.billingAddressParameters) {
         parameters.billingAddressParameters =
           this.settings.billingAddressParameters;
+      }
+
+      if (this.settings.shippingAddressRequired) {
+        this.gpSettings.baseRequest.shippingAddressRequired =
+          this.settings.shippingAddressRequired;
+      }
+
+      if (this.settings.shippingAddressParameters) {
+        this.gpSettings.baseRequest.shippingAddressParameters =
+          this.settings.shippingAddressParameters;
       }
 
       this.gpSettings.baseCardPaymentMethod = {
