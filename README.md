@@ -54,6 +54,33 @@ function submitApplePay() {
 }
 ```
 
+`submit()` must be called directly from a click handler, and it can be called
+again on the same instance after it finishes.
+
+##### Optional settings and helpers
+
+```javascript
+// Only show your Apple Pay button where Apple Pay is supported.
+if (walletjs.ApplePay.isAvailable()) {
+  // ...
+}
+
+const ap = new walletjs.ApplePay({
+  // ...
+  // Give up if the payment sheet hasn't opened after this many milliseconds.
+  // Safari never finishes submit() when the user dismisses the
+  // "Add cards to Apple Pay" prompt.
+  sheetTimeout: 30000,
+});
+
+// Cancel a sheet that is still open. The pending submit() resolves with
+// { status: "fail" }.
+ap.abort();
+```
+
+Starting a new `submit()` automatically aborts a sheet that is still open from a
+previous one.
+
 ## Response
 
 ##### success

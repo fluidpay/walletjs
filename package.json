@@ -6,7 +6,8 @@
   "main": "dist/walletjs.js",
   "private": true,
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "test": "node --test \"test/**/*.test.js\""
   },
   "author": "stevemkroll",
   "license": "MIT",
