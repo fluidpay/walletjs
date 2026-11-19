@@ -95,6 +95,25 @@ describe("constructor", () => {
     assert.equal(ap.domainName, null);
   });
 
+  test("displayName is optional", () => {
+    const ap = new ApplePay(settings({ displayName: "" }));
+    assert.equal(ap.displayName, null);
+  });
+
+  test("rejects a displayName Apple would not accept", () => {
+    for (const displayName of [42, "x".repeat(65)]) {
+      assert.throws(
+        () => new ApplePay(settings({ displayName })),
+        /displayName must be a string of 64 or fewer characters/
+      );
+    }
+  });
+
+  test("accepts a 64-character displayName", () => {
+    const displayName = "é".repeat(64);
+    assert.equal(new ApplePay(settings({ displayName })).displayName, displayName);
+  });
+
   test("surfaces PaymentRequest constructor errors", () => {
     globalThis.PaymentRequest = class {
       constructor() {
@@ -144,6 +163,26 @@ describe("submit", () => {
     ap.submit();
     await FakePaymentRequest.last.validateMerchant();
     assert.equal(globalThis.fetch.calls[0].body.DomainName, null);
+  });
+
+  test("sends DisplayName when displayName is set", async () => {
+    const ap = new ApplePay(settings({ displayName: "Example Store" }));
+    ap.submit();
+    await FakePaymentRequest.last.validateMerchant("https://apple.example/startSession");
+    assert.deepEqual(globalThis.fetch.calls[0].body, {
+      PKeyCompany: "company-key",
+      AppleMerchantId: "merchant-id",
+      ValidationUrl: "https://apple.example/startSession",
+      DomainName: "shop.example.com",
+      DisplayName: "Example Store",
+    });
+  });
+
+  test("leaves DisplayName out when displayName is not set", async () => {
+    const ap = new ApplePay(settings());
+    ap.submit();
+    await FakePaymentRequest.last.validateMerchant();
+    assert.equal("DisplayName" in globalThis.fetch.calls[0].body, false);
   });
 
   test("passes a promise to event.complete synchronously", async () => {

@@ -46,4 +46,5 @@ test("dist/walletjs.js matches the Apple Pay source behavior", () => {
   assert.match(code, /\/api\/public\/applepay\/validatemerchant/);
   assert.match(code, /\/api\/public\/applepay\/paymentauthorized/);
   assert.match(code, /sheetTimeout/, "dist is stale: run npm run build");
+  assert.match(code, /DisplayName/, "dist is stale: run npm run build");
 });

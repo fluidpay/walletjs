@@ -7,6 +7,7 @@ export class ApplePay {
     this.key = settings.key ? settings.key : null;
     this.domain = settings.domain ? settings.domain : null;
     this.domainName = settings.domainName ? settings.domainName : null;
+    this.displayName = settings.displayName ? settings.displayName : null;
     this.payment = settings.payment ? settings.payment : null;
     this.details = settings.details ? settings.details : null;
     this.options = settings.options ? settings.options : null;
@@ -53,6 +54,13 @@ export class ApplePay {
       return "missing required parameter options";
     }
     if (
+      this.displayName != null &&
+      (typeof this.displayName !== "string" ||
+        Array.from(this.displayName).length > 64)
+    ) {
+      return "displayName must be a string of 64 or fewer characters";
+    }
+    if (
       this.sheetTimeout != null &&
       (typeof this.sheetTimeout !== "number" || this.sheetTimeout <= 0)
     ) {
@@ -88,17 +96,22 @@ export class ApplePay {
   }
 
   async validateMerchant(validationURL) {
+    const body = {
+      PKeyCompany: this.key,
+      AppleMerchantId: this.payment.merchantIdentifier,
+      ValidationUrl: validationURL,
+      DomainName: this.domainName,
+    };
+    // Only sent when set, so the request is unchanged for everyone else.
+    if (this.displayName != null) {
+      body.DisplayName = this.displayName;
+    }
     const res = await fetch(
       `https://${this.domain}/api/public/applepay/validatemerchant`,
       {
         method: "post",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          PKeyCompany: this.key,
-          AppleMerchantId: this.payment.merchantIdentifier,
-          ValidationUrl: validationURL,
-          DomainName: this.domainName,
-        }),
+        body: JSON.stringify(body),
       }
     );
     if (!res.ok) {

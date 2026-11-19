@@ -25,6 +25,7 @@ const ap = new walletjs.ApplePay({
   key: "myKey0123456789",
   domain: "sandbox.fluidpay.com",
   domainName: "", // optionally override the Merchant Domain referenced in their certificate.
+  displayName: "", // optionally override the Display Name referenced in their certificate (64 characters max).
   payment: {
     merchantCapabilities: ["supports3DS", "supportsCredit", "supportsDebit"],
     supportedNetworks: ["visa", "masterCard", "discover"],
